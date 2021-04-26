@@ -16,7 +16,7 @@ export class PostListComponent {
     constructor(private postService: PostService) { }
 
     ngOnInit(): void {
-        this.destroy = this.postService.getPostSubsciption()
+        this.destroy = this.postService.getPosts()
             .subscribe((resp: Post[]) => this.posts = resp);
     }
 
