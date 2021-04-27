@@ -13,7 +13,7 @@ export class PostCreateComponent {
     constructor(private postService: PostService) { }
 
     onAddPost(form: NgForm): void {
-        const post: Post = { title: form.value.title, content: form.value.content };
+        const post: Post = { id: null, title: form.value.title, content: form.value.content };
         this.postService.addPost(post);
         form.resetForm();
     }
