@@ -10,7 +10,7 @@ mongoose.connect('mongodb+srv://ipyka:hV2VuDQK9NoUEQGI@cluster0.xxmcv.mongodb.ne
         console.log('Connected to db!')
     })
     .catch(() => {
-        console.log('Connection failed!')
+        console.log('Connection to db failed!')
     });
 
 app.use((req, res, next) => {
@@ -38,10 +38,23 @@ app.post("/api/posts", (req, res) => {
 });
 
 app.get('/api/posts', (req, res) => {
-    const posts = Post.find().then(docs => {
-        console.log(docs);
-        res.status(200).json({ message: 'Success', posts: docs });
+    Post.find().then(posts => {
+        res.status(200).json({ message: 'Success', posts });
     });
+});
+
+app.delete('/api/posts/:id', (req, res) => {
+    Post.deleteOne({ _id: req.params.id }).then(() => {
+        res.status(200).json({ message: 'Post deleted successfully!' });
+    });
+});
+
+app.put('/api/posts', (req, res) => {
+    Post.where({ _id: req.body._id })
+        .update({ title: req.body.title, content: req.body.content })
+        .then(() => {
+            res.status(200).json({ message: 'Post updated successfully!' });
+        });
 });
 
 module.exports = app;
