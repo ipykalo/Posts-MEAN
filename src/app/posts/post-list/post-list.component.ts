@@ -13,6 +13,7 @@ import { PostService } from '../post.service';
 export class PostListComponent {
     private destroy: Subscription[] = [];
     posts: Post[] = [];
+    isLoading: boolean = false;
 
     constructor(private postService: PostService, private router: Router) { }
 
@@ -25,18 +26,24 @@ export class PostListComponent {
     }
 
     onDelete(post: Post): void {
+        this.isLoading = true;
         const sub: Subscription = this.postService.deletePost(post._id)
             .subscribe(resp => {
                 if (resp?.message) {
                     this.fetchPost();
                 }
+                this.isLoading = false;
             });
         this.destroy.push(sub);
     }
 
     private fetchPost(): void {
+        this.isLoading = true;
         const sub: Subscription = this.postService.getPosts()
-            .subscribe((resp: Post[]) => this.posts = resp);
+            .subscribe((resp: Post[]) => { 
+                this.posts = resp;
+                this.isLoading = false;
+            });
         this.destroy.push(sub);
     }
 }

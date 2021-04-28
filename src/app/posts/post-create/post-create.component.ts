@@ -13,6 +13,7 @@ import { PostService } from '../post.service';
 export class PostCreateComponent {
     edit: boolean;
     post: Post;
+    isLoading: boolean = false;
     private destroy: Subscription[] = [];
 
     constructor(
@@ -47,12 +48,14 @@ export class PostCreateComponent {
     }
 
     private onAddPost(form: NgForm): void {
+        this.isLoading = true;
         const post: Post = { _id: form.value._id, title: form.value.title, content: form.value.content };
         const sub: Subscription = this.postService.addPost(post)
             .subscribe(resp => {
                 if (!resp?.message) {
                     return;
                 }
+                this.isLoading = false;
                 form.resetForm();
                 this.router.navigateByUrl('/');
             });
@@ -60,12 +63,14 @@ export class PostCreateComponent {
     }
 
     private onUpdatePost(form: NgForm): void {
+        this.isLoading = true;
         const post: Post = { _id: this.post._id, title: form.value.title, content: form.value.content };
         const sub: Subscription = this.postService.updatePost(post)
             .subscribe(resp => {
                 if (!resp?.message) {
                     return;
                 }
+                this.isLoading = false;
                 form.resetForm();
                 this.router.navigateByUrl('/');
             });

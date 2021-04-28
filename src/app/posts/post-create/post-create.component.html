@@ -28,3 +28,4 @@
         <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">{{ edit ? 'Update Post' : 'Create Post' }}</button>
     </form>
 </mat-card>
+<mat-spinner *ngIf="isLoading"></mat-spinner>
