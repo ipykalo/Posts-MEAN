@@ -1,46 +1,15 @@
 <mat-accordion multi="true" *ngIf="posts?.length">
-    <form #form="ngForm">
-        <mat-expansion-panel *ngFor="let post of posts">
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    <p *ngIf="!editMode">{{ post?.title }}</p>
-                    <mat-form-field *ngIf="editMode">
-                        <mat-label>Title</mat-label>
-                        <input 
-                            matInput 
-                            type="text" 
-                            name="title"
-                            required 
-                            [value]="post?.title"
-                            placeholder="Title"
-                            #nameControl="ngModel"
-                            ngModel>
-                        <mat-error *ngIf="nameControl.invalid">Please enter Post Title</mat-error>
-                    </mat-form-field>
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p *ngIf="!editMode">{{ post?.content }}</p>
-            <mat-form-field *ngIf="editMode">
-                <mat-label>Content</mat-label>
-                <textarea 
-                    matInput 
-                    [value]="post?.content"
-                    rows="4" 
-                    name="content" 
-                    required
-                    placeholder="Content"
-                    #contentControl="ngModel"
-                    ngModel>
-                </textarea>
-                <mat-error *ngIf="contentControl.invalid">Please enter content of the Post</mat-error>
-            </mat-form-field>
-            <mat-action-row>
-                <button mat-button color="primary" (click)="onEdit()" *ngIf="!editMode">Edit</button>
-                <button mat-button color="primary" (click)="onUpdatePost(form, post)" *ngIf="editMode">Save</button>
-                <button mat-button color="warn" (click)="onDelete(post)">Delete</button>
-            </mat-action-row>
-        </mat-expansion-panel>
-    </form>
+    <mat-expansion-panel *ngFor="let post of posts">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <p>{{ post?.title }}</p>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <p>{{ post?.content }}</p>
+        <mat-action-row>
+            <button mat-button color="primary" routerLink="/edit" [queryParams]="post">Edit</button>
+            <button mat-button color="warn" (click)="onDelete(post)">Delete</button>
+        </mat-action-row>
+    </mat-expansion-panel>
 </mat-accordion>
-<p class="no-posts mat-body-strong" *ngIf="!posts?.length">No posts added yet!</p>\
-<p>{{editMode}}</p>
+<p class="no-posts mat-body-strong" *ngIf="!posts?.length">No posts added yet!</p>

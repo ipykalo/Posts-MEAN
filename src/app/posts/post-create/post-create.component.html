@@ -1,5 +1,5 @@
 <mat-card>
-    <form (submit)="onAddPost(form)" #form="ngForm">
+    <form (submit)="onSavePost(form)" #form="ngForm">
         <mat-form-field>
             <mat-label>Title</mat-label>
             <input 
@@ -9,7 +9,7 @@
                 required 
                 placeholder="Title"
                 #nameControl="ngModel"
-                ngModel>
+                [ngModel]="post?.title">
             <mat-error *ngIf="nameControl.invalid">Please enter Post Title</mat-error>
         </mat-form-field>
         <mat-form-field>
@@ -21,10 +21,10 @@
                 required
                 placeholder="Content"
                 #contentControl="ngModel"
-                ngModel>
+                [ngModel]="post?.content">
             </textarea>
             <mat-error *ngIf="contentControl.invalid">Please enter content of the Post</mat-error>
         </mat-form-field>
-        <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">Save Post</button>
+        <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">{{ edit ? 'Update Post' : 'Create Post' }}</button>
     </form>
 </mat-card>

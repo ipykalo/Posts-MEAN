@@ -30,7 +30,7 @@ export class PostService {
     }
 
     updatePost(post: Post): void {
-        this.http.put<{ message: string }>(URL, post)
+        this.http.put<{ message: string }>(`${URL}/${post._id}`, post)
             .subscribe(() => {
                 this.fetchPosts();
             });

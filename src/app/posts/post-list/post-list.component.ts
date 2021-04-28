@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Post } from '../post.model';
 import { PostService } from '../post.service';
@@ -13,7 +12,6 @@ import { PostService } from '../post.service';
 export class PostListComponent {
     private destroy: Subscription;
     posts: Post[] = [];
-    editMode: boolean;
 
     constructor(private postService: PostService) { }
 
@@ -29,16 +27,5 @@ export class PostListComponent {
 
     onDelete(post: Post): void {
         this.postService.deletePost(post._id);
-    }
-
-    onEdit(): void {
-        this.editMode = true;
-    }
-
-    onUpdatePost(form: NgForm, post: Post): void {
-        this.editMode = false;
-        const updatedPost: Post = { ...form.value, _id: post._id }
-        this.postService.updatePost(updatedPost);
-        form.resetForm();
     }
 }
