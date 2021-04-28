@@ -10,6 +10,7 @@ const URL: string = 'http://localhost:3000/api/posts';
 })
 export class PostService {
     private sub: Subject<Post[]> = new Subject();
+    private posts: Post[];
 
     constructor(private http: HttpClient) { }
 
@@ -17,9 +18,8 @@ export class PostService {
         return this.sub.asObservable();
     }
 
-    addPost(post: Post): void {
-        this.http.post<{ message: string, postId: string }>(URL, post)
-            .subscribe(() => this.fetchPosts());
+    addPost(post: Post): Observable<{ message: string }> {
+        return this.http.post<{ message: string }>(URL, post)
     }
 
     deletePost(id: string): void {
@@ -29,17 +29,25 @@ export class PostService {
             });
     }
 
-    updatePost(post: Post): void {
-        this.http.put<{ message: string }>(`${URL}/${post._id}`, post)
-            .subscribe(() => {
-                this.fetchPosts();
-            });
+    updatePost(post: Post): Observable<{ message: string }> {
+        return this.http.put<{ message: string }>(`${URL}/${post._id}`, post);
+    }
+
+    getPost(id: string): Post {
+        return this.posts?.find((post: Post) => post?._id === id);
+    }
+
+    fetchPost(id: string): Observable<Post> {
+        return this.http.get<Post>(`${URL}/${id}`);
     }
 
     fetchPosts(): void {
         this.http.get<{ message: string, posts: Post[] }>(URL)
             .subscribe(resp => {
-                resp.posts && this.sub.next(resp.posts);
+                if (resp?.posts) {
+                    this.posts = resp.posts;
+                    this.sub.next(resp.posts);
+                }
             });
     }
 }
