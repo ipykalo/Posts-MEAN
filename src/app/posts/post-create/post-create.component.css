@@ -14,3 +14,13 @@ input[type='file'] {
 button[type="submit"] {
     margin-top: 30px;
 }
+
+div.img-preview {
+    max-width: 150px;
+    max-height: 150px;
+    margin: 20px 0;
+}
+
+img {
+    width: 100%;
+}

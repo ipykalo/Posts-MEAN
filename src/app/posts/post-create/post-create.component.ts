@@ -15,6 +15,7 @@ export class PostCreateComponent {
     post: Post;
     isLoading: boolean = false;
     form: FormGroup;
+    imgPreview: string;
     private destroy: Subscription[] = [];
 
     constructor(
@@ -30,6 +31,13 @@ export class PostCreateComponent {
 
     ngOnDestroy(): void {
         this.destroy.forEach((sub: Subscription) => sub?.unsubscribe());
+    }
+
+    onSelectImage(event: Event): void {
+        const file = (event?.target as HTMLInputElement)?.files[0];
+        const reader = new FileReader();
+        reader.onload = () => this.imgPreview = reader?.result as string;
+        reader.readAsDataURL(file);
     }
 
     onSavePost(): void {
@@ -70,8 +78,8 @@ export class PostCreateComponent {
         this.form = new FormGroup({
             'title': new FormControl(null, [Validators.required, Validators.minLength(5)]),
             'content': new FormControl(null, [Validators.required]),
-            'image': new FormControl(null, [])
-        })
+            'image': new FormControl(null, [Validators.required])
+        });
     }
 
     private populateForm(): void {
@@ -79,7 +87,7 @@ export class PostCreateComponent {
         this.edit = params?.hasOwnProperty('id');
         this.post = this.postService.getPost(params?.id);
         this.setFormControls(this.post);
-        
+
         if (this.edit && !this.post) {
             const sub: Subscription = this.postService.fetchPost(params?.id)
                 .subscribe((resp: Post) => {
