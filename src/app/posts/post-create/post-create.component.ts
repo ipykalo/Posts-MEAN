@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Post } from '../post.model';
 import { PostService } from '../post.service';
+import { mimeTypeValidator } from './mime-type.validator';
 
 @Component({
     selector: 'app-post-create',
@@ -34,10 +35,12 @@ export class PostCreateComponent {
     }
 
     onSelectImage(event: Event): void {
-        const file = (event?.target as HTMLInputElement)?.files[0];
-        const reader = new FileReader();
+        const file: File = (event?.target as HTMLInputElement)?.files[0];
+        const reader: FileReader = new FileReader();
         reader.onload = () => this.imgPreview = reader?.result as string;
         reader.readAsDataURL(file);
+        this.form.patchValue({ image: file });
+        this.form.updateValueAndValidity();
     }
 
     onSavePost(): void {
@@ -78,7 +81,7 @@ export class PostCreateComponent {
         this.form = new FormGroup({
             'title': new FormControl(null, [Validators.required, Validators.minLength(5)]),
             'content': new FormControl(null, [Validators.required]),
-            'image': new FormControl(null, [Validators.required])
+            'image': new FormControl(null, { asyncValidators: [mimeTypeValidator] })
         });
     }
 
@@ -110,5 +113,6 @@ export class PostCreateComponent {
             'title': post?.title,
             'content': post?.content
         });
+        this.form.updateValueAndValidity();
     }
 }
