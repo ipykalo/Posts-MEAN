@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { Post } from "./post.model";
 import { HttpClient } from "@angular/common/http";
+import { Post } from "./post.interface";
 
 const URL: string = 'http://localhost:3000/api/posts';
 
@@ -23,7 +23,11 @@ export class PostService {
     }
 
     addPost(post: Post): Observable<{ message: string }> {
-        return this.http.post<{ message: string }>(URL, post)
+        const formData = new FormData(); 
+        formData.append('title', post?.title);
+        formData.append('content', post?.content);
+        formData.append('image', post?.image);
+        return this.http.post<{ message: string }>(URL, formData)
     }
 
     deletePost(id: string): Observable<{ message: string }> {

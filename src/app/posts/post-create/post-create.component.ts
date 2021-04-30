@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Post } from '../post.model';
+import { Post } from '../post.interface';
 import { PostService } from '../post.service';
 import { mimeTypeValidator } from './mime-type.validator';
 
@@ -49,7 +49,11 @@ export class PostCreateComponent {
 
     private onAddPost(): void {
         this.isLoading = true;
-        const post: Post = { title: this.form?.value?.title, content: this.form?.value?.content };
+        const post: Post = {
+            title: this.form?.value?.title,
+            content: this.form?.value?.content,
+            image: this.form?.value?.image
+        };
         const sub: Subscription = this.postService.addPost(post)
             .subscribe(resp => {
                 if (!resp?.message) {
@@ -64,7 +68,12 @@ export class PostCreateComponent {
 
     private onUpdatePost(): void {
         this.isLoading = true;
-        const post: Post = { _id: this.post._id, title: this.form?.value?.title, content: this.form?.value?.content };
+        const post: Post = {
+            _id: this.post._id,
+            title: this.form?.value?.title,
+            content: this.form?.value?.content,
+            image: this.form?.value?.image
+        };
         const sub: Subscription = this.postService.updatePost(post)
             .subscribe(resp => {
                 if (!resp?.message) {

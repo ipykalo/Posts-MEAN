@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Post } from '../post.model';
+import { Post } from '../post.interface';
 import { PostService } from '../post.service';
 
 
