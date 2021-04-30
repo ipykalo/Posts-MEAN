@@ -1,30 +1,28 @@
 <mat-card>
-    <form (submit)="onSavePost(form)" #form="ngForm">
+    <form [formGroup]="form" (submit)="onSavePost()">
         <mat-form-field>
             <mat-label>Title</mat-label>
             <input 
                 matInput 
                 type="text" 
-                name="title"
-                required 
                 placeholder="Title"
-                #nameControl="ngModel"
-                [ngModel]="post?.title">
-            <mat-error *ngIf="nameControl.invalid">Please enter Post Title</mat-error>
+                formControlName="title">
+            <mat-error *ngIf="form.invalid">Please enter Post Title</mat-error>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Content</mat-label>
             <textarea 
                 matInput 
                 rows="4" 
-                name="content" 
-                required
-                placeholder="Content"
-                #contentControl="ngModel"
-                [ngModel]="post?.content">
+                formControlName="content" 
+                placeholder="Content">
             </textarea>
-            <mat-error *ngIf="contentControl.invalid">Please enter content of the Post</mat-error>
+            <mat-error *ngIf="form.invalid">Please enter content of the Post</mat-error>
         </mat-form-field>
+        <div>
+            <button mat-strocked-button type="button" (click)="filePicker?.click()">Pick Image</button>
+            <input type="file" #filePicker formControlName="image">
+        </div>
         <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">{{ edit ? 'Update Post' : 'Create Post' }}</button>
     </form>
 </mat-card>
