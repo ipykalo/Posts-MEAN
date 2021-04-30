@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Post } from '../post.model';
@@ -14,6 +14,7 @@ export class PostCreateComponent {
     edit: boolean;
     post: Post;
     isLoading: boolean = false;
+    form: FormGroup;
     private destroy: Subscription[] = [];
 
     constructor(
@@ -23,9 +24,62 @@ export class PostCreateComponent {
     ) { }
 
     ngOnInit(): void {
+        this.createForm();
+        this.populateForm();
+    }
+
+    ngOnDestroy(): void {
+        this.destroy.forEach((sub: Subscription) => sub?.unsubscribe());
+    }
+
+    onSavePost(): void {
+        this.edit ? this.onUpdatePost() : this.onAddPost();
+    }
+
+    private onAddPost(): void {
+        this.isLoading = true;
+        const post: Post = { title: this.form?.value?.title, content: this.form?.value?.content };
+        const sub: Subscription = this.postService.addPost(post)
+            .subscribe(resp => {
+                if (!resp?.message) {
+                    return;
+                }
+                this.isLoading = false;
+                this.form.reset();
+                this.router.navigateByUrl('/');
+            });
+        this.destroy.push(sub);
+    }
+
+    private onUpdatePost(): void {
+        this.isLoading = true;
+        const post: Post = { _id: this.post._id, title: this.form?.value?.title, content: this.form?.value?.content };
+        const sub: Subscription = this.postService.updatePost(post)
+            .subscribe(resp => {
+                if (!resp?.message) {
+                    return;
+                }
+                this.isLoading = false;
+                this.form.reset();
+                this.router.navigateByUrl('/');
+            });
+        this.destroy.push(sub);
+    }
+
+    private createForm(): void {
+        this.form = new FormGroup({
+            'title': new FormControl(null, [Validators.required, Validators.minLength(5)]),
+            'content': new FormControl(null, [Validators.required]),
+            'image': new FormControl(null, [])
+        })
+    }
+
+    private populateForm(): void {
         const params = this.route.snapshot?.params;
         this.edit = params?.hasOwnProperty('id');
         this.post = this.postService.getPost(params?.id);
+        this.setFormControls(this.post);
+        
         if (this.edit && !this.post) {
             const sub: Subscription = this.postService.fetchPost(params?.id)
                 .subscribe((resp: Post) => {
@@ -34,46 +88,19 @@ export class PostCreateComponent {
                         title: resp?.title,
                         content: resp?.content
                     }
+                    this.setFormControls(this.post);
                 });
             this.destroy.push(sub);
         }
     }
 
-    ngOnDestroy(): void {
-        this.destroy.forEach((sub: Subscription) => sub?.unsubscribe());
-    }
-
-    onSavePost(form: NgForm): void {
-        this.edit ? this.onUpdatePost(form) : this.onAddPost(form);
-    }
-
-    private onAddPost(form: NgForm): void {
-        this.isLoading = true;
-        const post: Post = { _id: form.value._id, title: form.value.title, content: form.value.content };
-        const sub: Subscription = this.postService.addPost(post)
-            .subscribe(resp => {
-                if (!resp?.message) {
-                    return;
-                }
-                this.isLoading = false;
-                form.resetForm();
-                this.router.navigateByUrl('/');
-            });
-        this.destroy.push(sub);
-    }
-
-    private onUpdatePost(form: NgForm): void {
-        this.isLoading = true;
-        const post: Post = { _id: this.post._id, title: form.value.title, content: form.value.content };
-        const sub: Subscription = this.postService.updatePost(post)
-            .subscribe(resp => {
-                if (!resp?.message) {
-                    return;
-                }
-                this.isLoading = false;
-                form.resetForm();
-                this.router.navigateByUrl('/');
-            });
-        this.destroy.push(sub);
+    private setFormControls(post: Post): void {
+        if (!post) {
+            return;
+        }
+        this.form.patchValue({
+            'title': post?.title,
+            'content': post?.content
+        });
     }
 }
