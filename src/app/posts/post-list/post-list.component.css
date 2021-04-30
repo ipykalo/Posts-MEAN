@@ -1,0 +1,12 @@
+:host {
+    display: block;
+    margin-top: 1rem;
+}
+
+.no-posts {
+    text-align: center;
+}
+
+mat-spinner {
+    margin: 0 auto;
+}
