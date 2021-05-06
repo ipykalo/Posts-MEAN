@@ -44,6 +44,10 @@ export class PostCreateComponent {
     }
 
     onSavePost(): void {
+        debugger
+        this.form
+        return
+        
         this.edit ? this.onUpdatePost() : this.onAddPost();
     }
 

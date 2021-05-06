@@ -7,7 +7,7 @@
                 type="text" 
                 placeholder="Title"
                 formControlName="title">
-            <mat-error *ngIf="form.invalid">Please enter Post Title</mat-error>
+            <mat-error *ngIf="form?.get('title')?.invalid">Please enter Post Title</mat-error>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Content</mat-label>
@@ -17,7 +17,7 @@
                 formControlName="content" 
                 placeholder="Content">
             </textarea>
-            <mat-error *ngIf="form.invalid">Please enter content of the Post</mat-error>
+            <mat-error *ngIf="form?.get('content')?.invalid">Please enter content of the Post</mat-error>
         </mat-form-field>
         <div>
             <button mat-strocked-button type="button" (click)="filePicker?.click()">Pick Image</button>
@@ -27,7 +27,7 @@
             </div>
             <mat-error *ngIf="form?.get('image')?.invalid">Please select correct type</mat-error>
         </div>
-        <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">{{ edit ? 'Update Post' : 'Create Post' }}</button>
+        <button mat-raised-button color="accent" type="submit" [disabled]="!form?.valid">{{ edit ? 'Update Post' : 'Create Post' }}</button>
     </form>
 </mat-card>
 <mat-spinner *ngIf="isLoading"></mat-spinner>
