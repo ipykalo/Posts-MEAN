@@ -61,11 +61,13 @@ router.delete("/:id", (req, res) => {
         });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", multer({ storage }).single("image"), (req, res) => {
+    const url = `${req.protocol}://${req.get('host')}`
     const post = new Post({
         _id: req.body._id,
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        path: `${url}/images/${req.file.filename}`
     });
     Post.updateOne({ _id: req.params.id }, post)
         .then(() => {

@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { Post } from "./post.interface";
+import { Form } from "@angular/forms";
 
 const URL: string = 'http://localhost:3000/api/posts';
 
@@ -23,10 +24,7 @@ export class PostService {
     }
 
     addPost(post: Post): Observable<{ message: string }> {
-        const formData = new FormData(); 
-        formData.append('title', post?.title);
-        formData.append('content', post?.content);
-        formData.append('image', post?.image);
+        const formData = this.getFormData(post);
         return this.http.post<{ message: string }>(URL, formData)
     }
 
@@ -35,7 +33,9 @@ export class PostService {
     }
 
     updatePost(post: Post): Observable<{ message: string }> {
-        return this.http.put<{ message: string }>(`${URL}/${post._id}`, post);
+        const formData = this.getFormData(post);
+        formData.append('_id', post?._id);
+        return this.http.put<{ message: string }>(`${URL}/${post._id}`, formData);
     }
 
     fetchPost(id: string): Observable<Post> {
@@ -47,5 +47,13 @@ export class PostService {
             .pipe(
                 map(resp => this.posts = resp?.posts)
             );
+    }
+
+    private getFormData(post: Post): FormData {
+        const formData = new FormData();
+        formData.append('title', post?.title);
+        formData.append('content', post?.content);
+        formData.append('image', post?.image);
+        return formData;
     }
 }
