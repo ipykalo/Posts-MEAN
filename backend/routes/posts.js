@@ -24,9 +24,11 @@ const storage = multer.diskStorage({
 });
 
 router.post("", multer({ storage }).single("image"), (req, res) => {
+    const url = `${req.protocol}://${req.get('host')}`
     const post = new Post({
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        path: `${url}/images/${req.file.filename}`
     });
     post.save()
         .then(() => {
