@@ -3,7 +3,6 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { Post } from "./post.interface";
-import { Form } from "@angular/forms";
 
 const URL: string = 'http://localhost:3000/api/posts';
 
@@ -15,8 +14,8 @@ export class PostService {
 
     constructor(private http: HttpClient) { }
 
-    getPosts(): Observable<Post[]> {
-        return this.fetchPosts();
+    getPosts(pageSize: number, page: number): Observable<{ posts: Post[], totalPosts: number }> {
+        return this.fetchPosts(pageSize, page);
     }
 
     getPost(id: string): Post {
@@ -42,10 +41,18 @@ export class PostService {
         return this.http.get<Post>(`${URL}/${id}`);
     }
 
-    private fetchPosts(): Observable<Post[]> {
-        return this.http.get<{ message: string, posts: Post[] }>(URL)
+    private fetchPosts(pageSize: number, page: number): Observable<{ posts: Post[], totalPosts: number }> {
+        let query: string = '';
+        if ((pageSize || pageSize === 0) && (page || page === 0)) {
+            query = `?pageSize=${pageSize}&page=${page}`;
+        }
+
+        return this.http.get<{ message: string, posts: Post[], totalPosts: number }>(`${URL}${query}`)
             .pipe(
-                map(resp => this.posts = resp?.posts)
+                map(resp => {
+                    this.posts = resp?.posts;
+                    return { posts: this.posts, totalPosts: resp?.totalPosts };
+                })
             );
     }
 
