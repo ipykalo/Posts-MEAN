@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer');
+const { count } = require('../models/post');
 
 const Post = require('../models/post');
 
@@ -37,9 +38,28 @@ router.post("", multer({ storage }).single("image"), (req, res) => {
 });
 
 router.get('', (req, res) => {
-    Post.find()
+    const pageSize = +req.query.pageSize;
+    const page = +req.query.page;
+    const query = Post.find();
+    let fetchedPosts;
+
+    if ((pageSize || pageSize === 0) && (page || page === 0)) {
+        query
+            .skip(pageSize * (page === 0 ? page : page - 1))
+            .limit(pageSize)
+    }
+
+    query
         .then(posts => {
-            res.status(200).json({ message: 'Posts fetched successfully!', posts });
+            fetchedPosts = posts;
+            return Post.count();
+        })
+        .then(count => {
+            res.status(200).json({
+                message: 'Posts fetched successfully!',
+                posts: fetchedPosts,
+                totalPosts: count
+            });
         });
 });
 

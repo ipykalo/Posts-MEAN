@@ -16,6 +16,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { PostService } from './posts/post.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
         MatExpansionModule,
         HttpClientModule,
         MatProgressSpinnerModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatPaginatorModule
     ],
     providers: [PostService],
     bootstrap: [AppComponent]

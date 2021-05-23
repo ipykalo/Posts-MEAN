@@ -17,3 +17,11 @@
     </mat-expansion-panel>
 </mat-accordion>
 <p class="no-posts mat-body-strong" *ngIf="!posts?.length && !isLoading">No posts added yet!</p>
+
+<mat-paginator 
+    *ngIf="posts?.length"
+    [length]="totalPosts"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="onPage($event)">
+</mat-paginator>

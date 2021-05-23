@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Post } from '../post.interface';
@@ -14,15 +15,24 @@ export class PostListComponent {
     private destroy: Subscription[] = [];
     posts: Post[] = [];
     isLoading: boolean = false;
-
+    totalPosts: number = 0;
+    pageSize: number = 2;
+    page: number = 1;
+    pageSizeOptions: number[] = [1, 2, 3, 4, 5];
     constructor(private postService: PostService, private router: Router) { }
 
     ngOnInit(): void {
-        this.fetchPost();
+        this.fetchPost(this.pageSize, this.page);
     }
 
     ngOnDestroy(): void {
         this.destroy?.forEach((sub: Subscription) => sub?.unsubscribe());
+    }
+
+    onPage(event: PageEvent): void {
+        this.page = event?.pageIndex + 1;
+        this.pageSize = event?.pageSize;
+        this.fetchPost(this.pageSize, this.page);
     }
 
     onDelete(post: Post): void {
@@ -30,18 +40,19 @@ export class PostListComponent {
         const sub: Subscription = this.postService.deletePost(post._id)
             .subscribe(resp => {
                 if (resp?.message) {
-                    this.fetchPost();
+                    this.fetchPost(this.pageSize, this.page);
                 }
                 this.isLoading = false;
             });
         this.destroy.push(sub);
     }
 
-    private fetchPost(): void {
+    private fetchPost(pageSize: number, page: number): void {
         this.isLoading = true;
-        const sub: Subscription = this.postService.getPosts()
-            .subscribe((resp: Post[]) => { 
-                this.posts = resp;
+        const sub: Subscription = this.postService.getPosts(pageSize, page)
+            .subscribe((resp: { posts: Post[], totalPosts: number }) => {
+                this.posts = resp?.posts;
+                this.totalPosts = resp?.totalPosts;
                 this.isLoading = false;
             });
         this.destroy.push(sub);
