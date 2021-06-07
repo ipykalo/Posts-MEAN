@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { Observable, of } from "rxjs";
+import { catchError, map } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { Post } from "./post.interface";
 
@@ -15,7 +15,10 @@ export class PostService {
     constructor(private http: HttpClient) { }
 
     getPosts(pageSize: number, page: number): Observable<{ posts: Post[], totalPosts: number }> {
-        return this.fetchPosts(pageSize, page);
+        return this.fetchPosts(pageSize, page)
+            .pipe(
+                catchError(error => of(error))
+            );
     }
 
     getPost(id: string): Post {

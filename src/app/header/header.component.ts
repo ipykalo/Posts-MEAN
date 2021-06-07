@@ -21,4 +21,8 @@ export class HeaderComponent {
     ngOnDestroy(): void {
         this.destroy.unsubscribe();
     }
+
+    logOut(): void {
+        this.sessionService.clearToken();
+    }
 }

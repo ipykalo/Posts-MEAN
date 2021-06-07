@@ -15,6 +15,10 @@ export class SessionService {
         return sessionStorage.getItem('token');
     }
 
+    clearToken(): void {
+        sessionStorage.removeItem('token');
+    }
+
     getSubscription(): Observable<boolean> {
         return this.subject.asObservable();
     }

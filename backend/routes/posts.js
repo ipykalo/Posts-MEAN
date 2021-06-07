@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 
 const Post = require('../models/post');
+const checkToken = require('../middleware/check-token');
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ const storage = multer.diskStorage({
     }
 });
 
-router.post("", multer({ storage }).single("image"), (req, res) => {
+router.post("", checkToken, multer({ storage }).single("image"), (req, res) => {
     const url = `${req.protocol}://${req.get('host')}`
     const post = new Post({
         title: req.body.title,
@@ -36,7 +37,7 @@ router.post("", multer({ storage }).single("image"), (req, res) => {
         });
 });
 
-router.get('', (req, res) => {
+router.get('', checkToken, (req, res) => {
     const pageSize = +req.query.pageSize;
     const page = +req.query.page;
     const query = Post.find();
@@ -62,7 +63,7 @@ router.get('', (req, res) => {
         });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", checkToken, (req, res) => {
     Post.findOne({ _id: req.params.id })
         .then(post => {
             if (post) {
@@ -73,14 +74,14 @@ router.get("/:id", (req, res) => {
         });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", checkToken, (req, res) => {
     Post.deleteOne({ _id: req.params.id })
         .then(() => {
             res.status(200).json({ message: 'Post deleted successfully!' });
         });
 });
 
-router.put("/:id", multer({ storage }).single("image"), (req, res) => {
+router.put("/:id", checkToken, multer({ storage }).single("image"), (req, res) => {
     const url = `${req.protocol}://${req.get('host')}`
     const post = new Post({
         _id: req.body._id,
