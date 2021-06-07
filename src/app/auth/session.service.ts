@@ -15,6 +15,10 @@ export class SessionService {
         return sessionStorage.getItem('token');
     }
 
+    get isActiveToken(): boolean {
+        return !!this.getToken();
+    }
+
     clearToken(): void {
         sessionStorage.removeItem('token');
     }
