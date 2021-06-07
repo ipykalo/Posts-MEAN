@@ -15,10 +15,6 @@ export class LoginComponent {
 
     onLogin(form: NgForm): void {
         this.authService.login(form.value.login, form.value.password)
-            .then(isLogin => {
-                if (isLogin) {
-                    this.router.navigate(['/posts']);
-                }
-            });
+            .then((isLogin: boolean) => isLogin && this.router.navigate(['/posts']));
     }
 }

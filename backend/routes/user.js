@@ -45,7 +45,7 @@ router.post("/login", (req, resp) => {
                     expiresIn: '1h'
                 }
             );
-            return resp.status(200).json({ token, message: 'Login successfully' });
+            resp.status(200).json({ token, message: 'Login successfully' });
         })
         .catch(error => resp.status(401).json({ message: error.message }))
 });
