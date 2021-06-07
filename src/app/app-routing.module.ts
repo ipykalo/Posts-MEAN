@@ -7,11 +7,11 @@ import { PostListComponent } from './posts/post-list/post-list.component';
 
 
 const routes: Routes = [
-	{ path: '', component: PostListComponent },
+	{ path: '', component: LoginComponent },
+	{ path: 'signup', component: SignupComponent },
+	{ path: 'posts', component: PostListComponent },
 	{ path: 'create', component: PostCreateComponent },
 	{ path: 'edit/:id', component: PostCreateComponent },
-	{ path: 'login', component: LoginComponent },
-	{ path: 'signup', component: SignupComponent },
 	{ path: '**', component: PostListComponent, redirectTo: '' }
 ];
 
