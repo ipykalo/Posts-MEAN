@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
+const TOKEN_EXPIRE_TIME = 3600;
+
 router.post("/signup", (req, resp) => {
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
@@ -39,10 +41,14 @@ router.post("/login", (req, resp) => {
                 { username: req.body.username, userId: user._id },
                 'secret_private_key',
                 {
-                    expiresIn: '1h'
+                    expiresIn: TOKEN_EXPIRE_TIME
                 }
             );
-            resp.status(200).json({ token, message: 'Login successfully' });
+            resp.status(200).json({
+                token,
+                expiresIn: TOKEN_EXPIRE_TIME,
+                message: 'Login successfully'
+            });
         })
         .catch(error => resp.status(401).json({ message: error.message }))
 });

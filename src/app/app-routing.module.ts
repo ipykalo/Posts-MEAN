@@ -9,10 +9,11 @@ import { PostListComponent } from './posts/post-list/post-list.component';
 
 const routes: Routes = [
 	{ path: '', component: PostListComponent, canActivate: [AuthorizationGuard] },
-	{ path: 'login', component: LoginComponent },
-	{ path: 'signup', component: SignupComponent },
+	{ path: 'posts', component: PostListComponent, canActivate: [AuthorizationGuard] },
 	{ path: 'create', component: PostCreateComponent, canActivate: [AuthorizationGuard] },
 	{ path: 'edit/:id', component: PostCreateComponent, canActivate: [AuthorizationGuard] },
+	{ path: 'login', component: LoginComponent },
+	{ path: 'signup', component: SignupComponent },
 	{ path: '**', component: PostListComponent, redirectTo: '' }
 ];
 

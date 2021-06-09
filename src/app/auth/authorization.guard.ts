@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { SessionService } from './session.service';
 
 @Injectable({
@@ -9,11 +9,11 @@ export class AuthorizationGuard implements CanActivate {
 
     constructor(private sessionService: SessionService, private router: Router) { }
 
-    canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        if (this.sessionService.isActiveToken) {
-            return true;
+    canActivate(): boolean {
+        if (!this.sessionService.isActiveToken) {
+            this.router.navigate(['/login']);
+            return false;
         }
-        this.router.navigate(['/login']);
-        return false;
+        return true;
     }
 }

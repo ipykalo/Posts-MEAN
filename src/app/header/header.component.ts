@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Subscription } from "rxjs";
+import { AuthService } from "../auth/auth.service";
 import { SessionService } from "../auth/session.service";
 
 @Component({
@@ -8,21 +9,21 @@ import { SessionService } from "../auth/session.service";
     styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-    islogin: boolean;
+    isAuthenticated: boolean;
     destroy: Subscription;
 
-    constructor(private sessionService: SessionService) { }
+    constructor(private sessionService: SessionService, private authService: AuthService) { }
 
     ngOnInit(): void {
         this.destroy = this.sessionService.getSubscription()
-            .subscribe((resp: boolean) => this.islogin = resp)
+            .subscribe((value: boolean) => this.isAuthenticated = value)
     }
 
     ngOnDestroy(): void {
         this.destroy.unsubscribe();
     }
 
-    logOut(): void {
-        this.sessionService.clearToken();
+    onLogout(): void {
+        this.authService.logout();
     }
 }

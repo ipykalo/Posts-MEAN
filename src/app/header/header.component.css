@@ -5,8 +5,7 @@ mat-toolbar {
 }
 
 ul {
-    display: grid;
-    grid-template-columns: 110px 110px;
+    display: flex;
     list-style: none;
     padding: 0;
     margin: 0;

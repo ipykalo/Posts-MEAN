@@ -24,7 +24,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                     this.dialogService.open(ErrorModalComponent, {
                         data: {
                             title: 'Error Message',
-                            message: err.error.message
+                            message: err?.error?.message || err?.error?.error?.message
                         },
                         minWidth: '500px'
                     });

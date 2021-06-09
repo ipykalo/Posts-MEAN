@@ -14,7 +14,11 @@ export class LoginComponent {
     constructor(private authService: AuthService, private router: Router) { }
 
     onLogin(form: NgForm): void {
+        this.isLoading = true;
         this.authService.login(form.value.login, form.value.password)
-            .then((isLogin: boolean) => isLogin && this.router.navigate(['/posts']));
+            .then((isLogin: boolean) => {
+                this.isLoading = false;
+                isLogin && this.router.navigate(['/posts']);
+            });
     }
 }
