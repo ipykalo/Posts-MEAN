@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SessionService {
-    private subject: Subject<boolean> = new Subject();
+    private subject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.isActiveToken);
 
     saveToken(token: string): void {
         token && sessionStorage.setItem('token', token);
@@ -21,6 +21,7 @@ export class SessionService {
 
     clearToken(): void {
         sessionStorage.removeItem('token');
+        this.notify(false);
     }
 
     getSubscription(): Observable<boolean> {
