@@ -11,6 +11,7 @@ const URL: string = 'http://localhost:3000/api/user';
     providedIn: 'root'
 })
 export class AuthService {
+    private timerId: NodeJS.Timer;
 
     constructor(
         private http: HttpClient,
@@ -44,9 +45,10 @@ export class AuthService {
     logout(): void {
         this.sessionService.clearToken();
         this.router.navigate(['/login']);
+        clearTimeout(this.timerId);
     }
 
     private setIdleTimeout(time: number): void {
-        setTimeout(this.logout.bind(this), time * 1000);
+        this.timerId = setTimeout(this.logout.bind(this), time * 1000);
     }
 }
