@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +23,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { ErrorInterceptor } from './error.interceptor';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { AuthService } from './auth/auth.service';
 
 @NgModule({
     declarations: [
@@ -61,6 +62,14 @@ import { MatDialogModule } from '@angular/material/dialog';
             provide: HTTP_INTERCEPTORS,
             useClass: ErrorInterceptor,
             multi: true
+        },
+        {
+            provide: APP_INITIALIZER,
+            useFactory: (authService: AuthService) => () => {
+                authService.initAuth();
+            },
+            multi: true,
+            deps: [AuthService]
         }
     ],
     bootstrap: [AppComponent]

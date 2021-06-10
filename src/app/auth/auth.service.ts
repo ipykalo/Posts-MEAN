@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { IAuthData } from './auth-data.interface';
 import { Credentials } from './credentials.interface';
 import { SessionService } from './session.service';
 
@@ -11,13 +12,22 @@ const URL: string = 'http://localhost:3000/api/user';
     providedIn: 'root'
 })
 export class AuthService {
-    private timerId: NodeJS.Timer;
+    private timerId: NodeJS.Timeout;
 
     constructor(
         private http: HttpClient,
         private sessionService: SessionService,
         private router: Router
     ) { }
+
+    initAuth(): void {
+        const authData: IAuthData = this.sessionService.getAuthData();
+        if (!authData?.token || !authData?.expiresIn || !authData?.timestamp) {
+            return;
+        }
+        const isExpiredToken: boolean = (Date.now() - authData?.timestamp) / 1000 >= authData.expiresIn;
+        isExpiredToken && this.logout();
+    }
 
     createUser(username: string, password: string): Promise<string> {
         const userData: Credentials = { username, password };
@@ -32,7 +42,12 @@ export class AuthService {
         return this.http.post<{ message: string, token: string, expiresIn: number }>(`${URL}/login`, userData)
             .pipe(map(resp => {
                 if (resp?.token) {
-                    this.sessionService.saveToken(resp.token);
+                    const authData: IAuthData = {
+                        token: resp?.token,
+                        expiresIn: resp?.expiresIn,
+                        timestamp: Date.now()
+                    }
+                    this.sessionService.saveAuthData(authData);
                     this.sessionService.notify(true);
                 }
                 this.setIdleTimeout(resp?.expiresIn);

@@ -48,7 +48,6 @@ router.get('', checkToken, (req, res) => {
             .skip(pageSize * (page === 0 ? page : page - 1))
             .limit(pageSize)
     }
-
     query
         .then(posts => {
             fetchedPosts = posts;

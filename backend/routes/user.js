@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-const TOKEN_EXPIRE_TIME = 3600;
+const TOKEN_EXPIRE_TIME = 1200 //20 minutes;
 
 router.post("/signup", (req, resp) => {
     bcrypt.hash(req.body.password, 10)

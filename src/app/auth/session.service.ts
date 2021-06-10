@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { IAuthData } from './auth-data.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -7,20 +8,28 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class SessionService {
     private subject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.isActiveToken);
 
-    saveToken(token: string): void {
-        token && sessionStorage.setItem('token', token);
+    saveAuthData(authData: IAuthData): void {
+        try {
+            localStorage.setItem('authData', JSON.stringify(authData));
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-    getToken(): string {
-        return sessionStorage.getItem('token');
+    getAuthData(): IAuthData {
+        try {
+            return JSON.parse(localStorage.getItem('authData'));
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     get isActiveToken(): boolean {
-        return !!this.getToken();
+        return !!this.getAuthData()?.token;
     }
 
     clearToken(): void {
-        sessionStorage.removeItem('token');
+        localStorage.removeItem('authData');
         this.notify(false);
     }
 
