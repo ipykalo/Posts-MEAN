@@ -47,6 +47,7 @@ router.post("/login", (req, resp) => {
             resp.status(200).json({
                 token,
                 expiresIn: TOKEN_EXPIRE_TIME,
+                userId: user._id,
                 message: 'Login successfully'
             });
         })

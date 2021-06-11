@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
+import { SessionService } from 'src/app/auth/session.service';
 import { Post } from '../post.interface';
 import { PostService } from '../post.service';
 
@@ -19,7 +20,7 @@ export class PostListComponent {
     page: number = 1;
     pageSizeOptions: number[] = [1, 2, 3, 4, 5];
 
-    constructor(private postService: PostService) { }
+    constructor(private postService: PostService, private sessionService: SessionService) { }
 
     ngOnInit(): void {
         this.fetchPost(this.pageSize, this.page);
@@ -45,6 +46,10 @@ export class PostListComponent {
                 this.isLoading = false;
             });
         this.destroy.push(sub);
+    }
+
+    hasPermission(creator: string): boolean {
+        return creator === this.sessionService.userId;
     }
 
     private fetchPost(pageSize: number, page: number): void {

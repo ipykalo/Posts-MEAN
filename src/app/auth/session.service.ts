@@ -32,6 +32,10 @@ export class SessionService {
         return (Date.now() - authData?.timestamp) / 1000 < authData.expiresIn;
     }
 
+    get userId(): string {
+        return this.getAuthData().userId;
+    }
+
     clearToken(): void {
         localStorage.removeItem('authData');
         this.notify(false);

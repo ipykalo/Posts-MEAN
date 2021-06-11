@@ -34,12 +34,13 @@ export class AuthService {
 
     login(username: string, password: string): Promise<boolean> {
         const userData: Credentials = { username, password };
-        return this.http.post<{ message: string, token: string, expiresIn: number }>(`${URL}/login`, userData)
+        return this.http.post<{ message: string, token: string, expiresIn: number, userId: string }>(`${URL}/login`, userData)
             .pipe(map(resp => {
                 if (resp?.token) {
                     const authData: IAuthData = {
                         token: resp?.token,
                         expiresIn: resp?.expiresIn,
+                        userId: resp.userId,
                         timestamp: Date.now()
                     }
                     this.sessionService.saveAuthData(authData);
