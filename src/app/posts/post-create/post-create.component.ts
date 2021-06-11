@@ -68,18 +68,20 @@ export class PostCreateComponent {
 
     private onUpdatePost(): void {
         this.isLoading = true;
+        const isImageUpdated: boolean = this.form?.value?.image instanceof File;
         const post: Post = {
             _id: this.post._id,
             title: this.form?.value?.title,
             content: this.form?.value?.content,
-            image: this.form?.value?.image
+            image: isImageUpdated ? this.form?.value?.image : null,
+            path: !isImageUpdated ? this.form?.value?.image : null
         };
         const sub: Subscription = this.postService.updatePost(post)
             .subscribe(resp => {
-                if (!resp?.message) {
+                this.isLoading = false;
+                if (!resp) {
                     return;
                 }
-                this.isLoading = false;
                 this.form.reset();
                 this.router.navigateByUrl('/');
             });
@@ -99,6 +101,7 @@ export class PostCreateComponent {
         this.edit = params?.hasOwnProperty('id');
         this.post = this.postService.getPost(params?.id);
         this.setFormControls(this.post);
+        this.post?.path && (this.imgPreview = this.post?.path);
 
         if (this.edit && !this.post) {
             const sub: Subscription = this.postService.fetchPost(params?.id)
@@ -120,7 +123,8 @@ export class PostCreateComponent {
         }
         this.form.patchValue({
             'title': post?.title,
-            'content': post?.content
+            'content': post?.content,
+            'image': this.post?.path || ''
         });
         this.form.updateValueAndValidity();
     }

@@ -29,7 +29,8 @@ router.post("", checkToken, multer({ storage }).single("image"), (req, res) => {
     const post = new Post({
         title: req.body.title,
         content: req.body.content,
-        path: `${url}/images/${req.file.filename}`
+        path: `${url}/images/${req.file.filename}`,
+        creator: req.userData.userId
     });
     post.save()
         .then(() => {
@@ -51,7 +52,7 @@ router.get('', checkToken, (req, res) => {
     query
         .then(posts => {
             fetchedPosts = posts;
-            return Post.count();
+            return Post.countDocuments();
         })
         .then(count => {
             res.status(200).json({
@@ -74,8 +75,12 @@ router.get("/:id", checkToken, (req, res) => {
 });
 
 router.delete("/:id", checkToken, (req, res) => {
-    Post.deleteOne({ _id: req.params.id })
-        .then(() => {
+    Post.deleteOne({ _id: req.params.id, creator: req.userData.userId })
+        .then(result => {
+            if (result?.n === 0) {
+                res.status(401).json({ message: 'Only the creator can delete the Post!' });
+                return;
+            }
             res.status(200).json({ message: 'Post deleted successfully!' });
         });
 });
@@ -83,13 +88,17 @@ router.delete("/:id", checkToken, (req, res) => {
 router.put("/:id", checkToken, multer({ storage }).single("image"), (req, res) => {
     const url = `${req.protocol}://${req.get('host')}`
     const post = new Post({
-        _id: req.body._id,
-        title: req.body.title,
-        content: req.body.content,
-        path: `${url}/images/${req.file.filename}`
+        _id: req.body?._id,
+        title: req.body?.title,
+        content: req.body?.content,
+        path: req.file?.filename ? `${url}/images/${req.file.filename}` : req.file?.path
     });
-    Post.updateOne({ _id: req.params.id }, post)
-        .then(() => {
+    Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
+        .then(result => {
+            if (result?.n === 0) {
+                res.status(401).json({ message: 'Only the creator can modify the Post!' });
+                return;
+            }
             res.status(200).json({ message: 'Post updated successfully!' });
         });
 });

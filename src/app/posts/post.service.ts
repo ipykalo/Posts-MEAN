@@ -17,7 +17,7 @@ export class PostService {
     getPosts(pageSize: number, page: number): Observable<{ posts: Post[], totalPosts: number }> {
         return this.fetchPosts(pageSize, page)
             .pipe(
-                catchError(error => of(error))
+                catchError(() => of(null))
             );
     }
 
@@ -28,20 +28,23 @@ export class PostService {
     addPost(post: Post): Observable<{ message: string }> {
         const formData = this.getFormData(post);
         return this.http.post<{ message: string }>(URL, formData)
+            .pipe(catchError(() => of(null)));
     }
 
     deletePost(id: string): Observable<{ message: string }> {
-        return this.http.delete<{ message: string }>(`${URL}/${id}`);
+        return this.http.delete<{ message: string }>(`${URL}/${id}`)
+            .pipe(catchError(err => of(null)));
     }
 
     updatePost(post: Post): Observable<{ message: string }> {
         const formData = this.getFormData(post);
         formData.append('_id', post?._id);
-        return this.http.put<{ message: string }>(`${URL}/${post._id}`, formData);
+        return this.http.put<{ message: string }>(`${URL}/${post._id}`, formData)
+            .pipe(catchError(() => of(null)));
     }
 
     fetchPost(id: string): Observable<Post> {
-        return this.http.get<Post>(`${URL}/${id}`);
+        return this.http.get<Post>(`${URL}/${id}`)
     }
 
     private fetchPosts(pageSize: number, page: number): Observable<{ posts: Post[], totalPosts: number }> {
@@ -64,6 +67,7 @@ export class PostService {
         formData.append('title', post?.title);
         formData.append('content', post?.content);
         formData.append('image', post?.image);
+        formData.append('path', post?.path);
         return formData;
     }
 }

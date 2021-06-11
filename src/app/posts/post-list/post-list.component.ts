@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Post } from '../post.interface';
 import { PostService } from '../post.service';
@@ -19,7 +18,8 @@ export class PostListComponent {
     pageSize: number = 2;
     page: number = 1;
     pageSizeOptions: number[] = [1, 2, 3, 4, 5];
-    constructor(private postService: PostService, private router: Router) { }
+
+    constructor(private postService: PostService) { }
 
     ngOnInit(): void {
         this.fetchPost(this.pageSize, this.page);
