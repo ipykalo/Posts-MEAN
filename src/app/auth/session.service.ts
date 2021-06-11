@@ -25,7 +25,11 @@ export class SessionService {
     }
 
     get isActiveToken(): boolean {
-        return !!this.getAuthData()?.token;
+        const authData: IAuthData = this.getAuthData();
+        if (!authData?.token || !authData?.expiresIn || !authData?.timestamp) {
+            return false;
+        }
+        return (Date.now() - authData?.timestamp) / 1000 < authData.expiresIn;
     }
 
     clearToken(): void {

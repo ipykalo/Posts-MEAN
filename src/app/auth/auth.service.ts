@@ -21,12 +21,7 @@ export class AuthService {
     ) { }
 
     initAuth(): void {
-        const authData: IAuthData = this.sessionService.getAuthData();
-        if (!authData?.token || !authData?.expiresIn || !authData?.timestamp) {
-            return;
-        }
-        const isExpiredToken: boolean = (Date.now() - authData?.timestamp) / 1000 >= authData.expiresIn;
-        isExpiredToken && this.logout();
+        !this.sessionService.isActiveToken && this.logout();
     }
 
     createUser(username: string, password: string): Promise<string> {
