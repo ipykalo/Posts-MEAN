@@ -1,4 +1,5 @@
-const Post = require('../models/post');
+const Post = require("../models/post");
+const Config = require("../config")
 
 exports.create = (req, res) => {
     const url = `${req.protocol}://${req.get('host')}`
@@ -9,10 +10,8 @@ exports.create = (req, res) => {
         creator: req.userData.userId
     });
     post.save()
-        .then(() => {
-            res.status(201).json({ message: 'Post added successfully!' });
-        })
-        .catch(error => resp.status(500).json({ message: error.message || 'Creating a post failed!' }));
+        .then(() => res.status(201).json({ message: Config.MESSAGES.CREATE_POST_SUCCESS }))
+        .catch(err => resp.status(500).json({ message: err.message || Config.MESSAGES.CREATE_POST_FAILURE }));
 }
 
 exports.fetchAll = (req, res) => {
@@ -33,36 +32,34 @@ exports.fetchAll = (req, res) => {
         })
         .then(count => {
             res.status(200).json({
-                message: 'Posts fetched successfully!',
+                message: Config.MESSAGES.FETCH_POSTS_SUCCESS,
                 posts: fetchedPosts,
                 totalPosts: count
             });
         })
-        .catch(error => resp.status(500).json({ message: error.message || 'Fetching posts failed!' }));
+        .catch(error => resp.status(500).json({ message: error.message || Config.MESSAGES.FETCH_POSTS_FAILURE }));
 }
 
 exports.fetchOne = (req, res) => {
     Post.findOne({ _id: req.params.id })
         .then(post => {
             if (post) {
-                res.status(200).json(post);
-                return;
+                return res.status(200).json(post);
             }
-            res.status(404).json({ message: 'Post not feund!' })
+            res.status(404).json({ message: Config.MESSAGES.FETCH_POST_FAILURE })
         })
-        .catch(error => resp.status(500).json({ message: error.message || 'Fetching the post failed!' }));
+        .catch(error => resp.status(500).json({ message: error.message || Config.MESSAGES.FETCH_POST_FAILURE }));
 }
 
 exports.delete = (req, res) => {
     Post.deleteOne({ _id: req.params.id, creator: req.userData.userId })
         .then(result => {
             if (result?.n === 0) {
-                res.status(401).json({ message: 'Only the creator can delete the Post!' });
-                return;
+                return res.status(401).json({ message: Config.MESSAGES.DELTE_POST_AUTH });
             }
-            res.status(200).json({ message: 'Post deleted successfully!' });
+            res.status(200).json({ message: Config.MESSAGES.DELTE_POST_SUCCESS });
         })
-        .catch(error => resp.status(500).json({ message: error.message || 'Deleting the post failed!' }));
+        .catch(error => resp.status(500).json({ message: error.message || Config.MESSAGES.DELTE_POST_FAILURE }));
 }
 
 exports.update = (req, res) => {
@@ -76,10 +73,9 @@ exports.update = (req, res) => {
     Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
         .then(result => {
             if (result?.n === 0) {
-                res.status(401).json({ message: 'Only the creator can modify the Post!' });
-                return;
+                return res.status(401).json({ message: Config.MESSAGES.UPDATE_POST_AUTH });
             }
-            res.status(200).json({ message: 'Post updated successfully!' });
+            res.status(200).json({ message: Config.MESSAGES.UPDATE_POST_SUCCESS });
         })
-        .catch(error => resp.status(500).json({ message: error.message || 'Updating a post failed!' }));
+        .catch(error => resp.status(500).json({ message: error.message || Config.MESSAGES.UPDATE_POST_FAILURE }));
 }
