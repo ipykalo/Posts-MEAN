@@ -16,9 +16,9 @@ export class PostListComponent {
     posts: Post[] = [];
     isLoading: boolean = false;
     totalPosts: number = 0;
-    pageSize: number = 2;
+    pageSizeOptions: number[] = [5, 10, 15, 20];
+    pageSize: number = this.pageSizeOptions[0];
     page: number = 1;
-    pageSizeOptions: number[] = [1, 2, 3, 4, 5];
 
     constructor(private postService: PostService, private sessionService: SessionService) { }
 
