@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { Helper } from 'src/app/helper';
+import { Helper } from 'src/app/classes/helper';
 import { URLS } from 'src/environments/environment';
 import { IAuthData } from '../interfaces/auth-data.interface';
 import { Credentials } from '../interfaces/credentials.interface';

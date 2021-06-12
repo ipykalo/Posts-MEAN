@@ -3,7 +3,7 @@ import { Observable, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { Post } from "./post.interface";
-import { Helper } from "../helper";
+import { Helper } from "../classes/helper";
 import { URLS } from "src/environments/environment";
 
 @Injectable({
