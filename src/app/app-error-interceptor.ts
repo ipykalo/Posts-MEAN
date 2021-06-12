@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { MatDialog } from '@angular/material/dialog';
-import { ErrorModalComponent } from './error-modal/error-modal.component';
+import { ErrorModalComponent } from './shared/error-modal/error-modal.component';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {

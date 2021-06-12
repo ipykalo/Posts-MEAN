@@ -6,7 +6,7 @@ import {
 	HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { SessionService } from './session.service';
+import { SessionService } from './services/session.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {

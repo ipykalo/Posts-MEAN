@@ -12,7 +12,6 @@ ul {
     margin-left: 50px;
 }
 
-a {
-    color: #fff;
-    text-decoration: none;
+li {
+    margin-right: 10px;
 }

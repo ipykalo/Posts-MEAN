@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { IAuthData } from './auth-data.interface';
-import { Credentials } from './credentials.interface';
+import { IAuthData } from '../interfaces/auth-data.interface';
+import { Credentials } from '../interfaces/credentials.interface';
 import { SessionService } from './session.service';
 
 const URL: string = 'http://localhost:3000/api/user';

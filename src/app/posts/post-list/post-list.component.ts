@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
-import { SessionService } from 'src/app/auth/session.service';
+import { SessionService } from 'src/app/auth/services/session.service';
 import { Post } from '../post.interface';
 import { PostService } from '../post.service';
 

@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Subscription } from "rxjs";
-import { AuthService } from "../auth/auth.service";
-import { SessionService } from "../auth/session.service";
+import { AuthService } from "../../auth/services/auth.service";
+import { SessionService } from "../../auth/services/session.service";
 
 @Component({
     selector: 'app-header',
