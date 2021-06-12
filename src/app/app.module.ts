@@ -20,7 +20,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { SignupComponent } from './auth/signup/signup.component';
 import { LoginComponent } from './auth/login/login.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
-import { ErrorInterceptor } from './error.interceptor';
+import { ErrorInterceptor } from './error-interceptor';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AuthService } from './auth/auth.service';

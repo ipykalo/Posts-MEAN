@@ -20,7 +20,8 @@ router.post("/signup", (req, resp) => {
                 .catch(error => {
                     resp.status(500).json({ error })
                 });
-        });
+        })
+        .catch(error => resp.status(401).json({ message: error.message || 'Creating the user is failed!' }));
 });
 
 router.post("/login", (req, resp) => {
@@ -51,7 +52,7 @@ router.post("/login", (req, resp) => {
                 message: 'Login successfully'
             });
         })
-        .catch(error => resp.status(401).json({ message: error.message }))
+        .catch(error => resp.status(401).json({ message: error.message || 'Login is failed!' }));
 });
 
 module.exports = router;

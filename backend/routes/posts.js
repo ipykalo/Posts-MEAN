@@ -35,7 +35,8 @@ router.post("", checkToken, multer({ storage }).single("image"), (req, res) => {
     post.save()
         .then(() => {
             res.status(201).json({ message: 'Post added successfully!' });
-        });
+        })
+        .catch(error => resp.status(500).json({ message: error.message || 'Creating a post failed!' }));
 });
 
 router.get('', checkToken, (req, res) => {
@@ -60,7 +61,8 @@ router.get('', checkToken, (req, res) => {
                 posts: fetchedPosts,
                 totalPosts: count
             });
-        });
+        })
+        .catch(error => resp.status(500).json({ message: error.message || 'Fetching posts failed!' }));
 });
 
 router.get("/:id", checkToken, (req, res) => {
@@ -71,7 +73,8 @@ router.get("/:id", checkToken, (req, res) => {
                 return;
             }
             res.status(404).json({ message: 'Post not feund!' })
-        });
+        })
+        .catch(error => resp.status(500).json({ message: error.message || 'Fetching the post failed!' }));
 });
 
 router.delete("/:id", checkToken, (req, res) => {
@@ -82,7 +85,8 @@ router.delete("/:id", checkToken, (req, res) => {
                 return;
             }
             res.status(200).json({ message: 'Post deleted successfully!' });
-        });
+        })
+        .catch(error => resp.status(500).json({ message: error.message || 'Deleting the post failed!' }));
 });
 
 router.put("/:id", checkToken, multer({ storage }).single("image"), (req, res) => {
@@ -100,7 +104,8 @@ router.put("/:id", checkToken, multer({ storage }).single("image"), (req, res) =
                 return;
             }
             res.status(200).json({ message: 'Post updated successfully!' });
-        });
+        })
+        .catch(error => resp.status(500).json({ message: error.message || 'Updating a post failed!' }));
 });
 
 module.exports = router;
