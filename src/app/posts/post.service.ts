@@ -3,8 +3,8 @@ import { Observable, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { Post } from "./post.interface";
-
-const URL: string = 'http://localhost:3000/api/posts';
+import { Helper } from "../helper";
+import { URLS } from "src/environments/environment";
 
 @Injectable({
     providedIn: 'root'
@@ -27,33 +27,30 @@ export class PostService {
 
     addPost(post: Post): Observable<{ message: string }> {
         const formData = this.getFormData(post);
-        return this.http.post<{ message: string }>(URL, formData)
+        return this.http.post<{ message: string }>(Helper.url(URLS.CREATE_POST), formData)
             .pipe(catchError(() => of(null)));
     }
 
     deletePost(id: string): Observable<{ message: string }> {
-        return this.http.delete<{ message: string }>(`${URL}/${id}`)
+        return this.http.delete<{ message: string }>(Helper.url(URLS.DELETE_POST, id))
             .pipe(catchError(err => of(null)));
     }
 
     updatePost(post: Post): Observable<{ message: string }> {
         const formData = this.getFormData(post);
         formData.append('_id', post?._id);
-        return this.http.put<{ message: string }>(`${URL}/${post._id}`, formData)
+        return this.http.put<{ message: string }>(Helper.url(URLS.UPDATE_POST, post?._id), formData)
             .pipe(catchError(() => of(null)));
     }
 
     fetchPost(id: string): Observable<Post> {
-        return this.http.get<Post>(`${URL}/${id}`)
+        return this.http.get<Post>(Helper.url(URLS.FETCH_POST, id));
     }
 
     private fetchPosts(pageSize: number, page: number): Observable<{ posts: Post[], totalPosts: number }> {
-        let query: string = '';
-        if ((pageSize || pageSize === 0) && (page || page === 0)) {
-            query = `?pageSize=${pageSize}&page=${page}`;
-        }
-
-        return this.http.get<{ message: string, posts: Post[], totalPosts: number }>(`${URL}${query}`)
+        return this.http.get<{ message: string, posts: Post[], totalPosts: number }>(
+            Helper.url(URLS.FETCH_POSTS, pageSize, page)
+        )
             .pipe(
                 map(resp => {
                     this.posts = resp?.posts;

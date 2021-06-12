@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { Helper } from 'src/app/helper';
+import { URLS } from 'src/environments/environment';
 import { IAuthData } from '../interfaces/auth-data.interface';
 import { Credentials } from '../interfaces/credentials.interface';
 import { SessionService } from './session.service';
-
-const URL: string = 'http://localhost:3000/api/user';
 
 @Injectable({
     providedIn: 'root'
@@ -26,7 +26,7 @@ export class AuthService {
 
     createUser(username: string, password: string): Promise<string> {
         const userData: Credentials = { username, password };
-        return this.http.post<{ message: string }>(`${URL}/signup`, userData)
+        return this.http.post<{ message: string }>(Helper.url(URLS.SIGNUP), userData)
             .pipe(map(resp => resp?.message))
             .toPromise()
             .catch(() => Promise.resolve(''))
@@ -34,7 +34,7 @@ export class AuthService {
 
     login(username: string, password: string): Promise<boolean> {
         const userData: Credentials = { username, password };
-        return this.http.post<{ message: string, token: string, expiresIn: number, userId: string }>(`${URL}/login`, userData)
+        return this.http.post<{ message: string, token: string, expiresIn: number, userId: string }>(Helper.url(URLS.LOGIN), userData)
             .pipe(map(resp => {
                 if (resp?.token) {
                     const authData: IAuthData = {
