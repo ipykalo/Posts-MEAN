@@ -61,7 +61,7 @@ export class PostCreateComponent {
                 }
                 this.isLoading = false;
                 this.form.reset();
-                this.router.navigateByUrl('/');
+                this.router.navigate(['/posts/list']);
             });
         this.destroy.push(sub);
     }
@@ -83,7 +83,7 @@ export class PostCreateComponent {
                     return;
                 }
                 this.form.reset();
-                this.router.navigateByUrl('/');
+                this.router.navigate(['/posts/list']);
             });
         this.destroy.push(sub);
     }

@@ -18,7 +18,7 @@ export class LoginComponent {
         this.authService.login(form.value.login, form.value.password)
             .then((isLogin: boolean) => {
                 this.isLoading = false;
-                isLogin && this.router.navigate(['/posts']);
+                isLogin && this.router.navigate(['/posts/list']);
             });
     }
 }

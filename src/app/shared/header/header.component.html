@@ -2,10 +2,10 @@
     <span>My Messages</span>
     <ul>
         <li *ngIf="isAuthenticated">
-            <button mat-button routerLink="/posts" routerLinkActive="mat-accent" [routerLinkActiveOptions]="{exact: true}">All Posts</button>
+            <button mat-button routerLink="/posts/list" routerLinkActive="mat-accent" [routerLinkActiveOptions]="{exact: true}">All Posts</button>
         </li>
         <li *ngIf="isAuthenticated">
-            <button mat-button routerLink="/create" routerLinkActive="mat-accent">New Post</button>
+            <button mat-button routerLink="/posts/create" routerLinkActive="mat-accent">New Post</button>
         </li>
         <li *ngIf="!isAuthenticated">
             <button mat-button routerLink="/login" routerLinkActive="mat-accent">Login</button>

@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorInterceptor } from './app-error-interceptor';
-import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -20,7 +19,6 @@ import { MatDialogModule } from '@angular/material/dialog';
         AppRoutingModule,
         BrowserAnimationsModule,
         HttpClientModule,
-        PostsModule,
         AuthModule,
         SharedModule,
         MatDialogModule
