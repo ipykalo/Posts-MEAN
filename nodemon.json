@@ -1,0 +1,6 @@
+{
+    "env": {
+        "MONGO_DRIVER": "mongodb+srv://ipyka:hV2VuDQK9NoUEQGI@cluster0.xxmcv.mongodb.net/node-angulr?retryWrites=true&w=majority",
+        "JWT_KEY": "secret_private_key"
+    }
+}

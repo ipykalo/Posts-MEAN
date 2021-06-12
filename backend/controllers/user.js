@@ -37,7 +37,7 @@ exports.login = (req, resp) => {
             }
             const token = jwt.sign(
                 { username: req.body.username, userId: user._id },
-                Config.TOKEN_SECRET_KEY,
+                process.env.JWT_KEY,
                 {
                     expiresIn: Config.TOKEN_EXPIRE_TIME
                 }

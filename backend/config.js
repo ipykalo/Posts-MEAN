@@ -6,8 +6,6 @@ exports.MIME_TYPE_MAP = {
 
 exports.TOKEN_EXPIRE_TIME = 1200 //20 minutes;
 
-exports.TOKEN_SECRET_KEY = 'secret_private_key';
-
 exports.MESSAGES = {
     CREATE_POST_SUCCESS: 'Post created successfully!',
     CREATE_POST_FAILURE: 'Creating a post failed!',
