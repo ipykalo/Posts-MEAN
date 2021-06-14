@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    baseUrl: 'http://posts-env.eba-zwk4sjex.eu-west-1.elasticbeanstalk.com/'
+    baseUrl: 'http://posts-env.eba-zwk4sjex.eu-west-1.elasticbeanstalk.com'
 };
 
 export const URLS = {
