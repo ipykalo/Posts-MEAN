@@ -11,8 +11,8 @@ mongoose.connect(process.env.MONGO_DRIVER, { useUnifiedTopology: true, useNewUrl
     .then(() => {
         console.log('Connected to db!')
     })
-    .catch(() => {
-        console.log('Connection to db failed!')
+    .catch(err => {
+        console.log(err, 'Connection to db failed!')
     });
 
 app.use(express.json());
